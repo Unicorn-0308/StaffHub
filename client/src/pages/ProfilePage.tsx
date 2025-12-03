@@ -4,10 +4,7 @@ import { motion } from 'framer-motion';
 import {
   User,
   Mail,
-  Phone,
   MapPin,
-  Calendar,
-  Building2,
   Briefcase,
   Shield,
   Edit,

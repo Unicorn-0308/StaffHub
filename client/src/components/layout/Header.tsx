@@ -29,7 +29,8 @@ interface Notification {
   message: string;
   time: string;
   read: boolean;
-  icon: React.ComponentType<{ className?: string; size?: number }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: React.ComponentType<any>;
 }
 
 const initialNotifications: Notification[] = [
