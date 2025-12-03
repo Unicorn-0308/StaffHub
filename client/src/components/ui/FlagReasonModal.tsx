@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Flag, X, AlertTriangle } from 'lucide-react';
+import { Flag, AlertTriangle } from 'lucide-react';
 
 interface FlagReasonModalProps {
   employeeName: string;

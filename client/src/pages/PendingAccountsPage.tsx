@@ -11,9 +11,8 @@ import {
   Calendar,
   User,
   Loader,
-  AlertCircle,
 } from 'lucide-react';
-import { GET_SIGNUP_REQUESTS, GET_SIGNUP_REQUEST_COUNT, GET_DEPARTMENTS, GET_POSITIONS } from '../graphql/queries';
+import { GET_SIGNUP_REQUESTS, GET_DEPARTMENTS, GET_POSITIONS } from '../graphql/queries';
 import { APPROVE_SIGNUP_REQUEST, REJECT_SIGNUP_REQUEST } from '../graphql/mutations';
 import toast from 'react-hot-toast';
 

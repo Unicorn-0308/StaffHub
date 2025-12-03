@@ -6,14 +6,11 @@ import {
   Mail,
   Phone,
   MapPin,
-  Calendar,
   Building2,
   Briefcase,
   Award,
   BookOpen,
   Flag,
-  Edit,
-  Trash2,
   User,
   TrendingUp,
   Clock,
@@ -87,7 +84,7 @@ const EmployeeDetailPage: React.FC = () => {
     );
   }
 
-  const statusColors = {
+  const statusColors: Record<string, string> = {
     ACTIVE: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
     INACTIVE: 'bg-surface-700 text-surface-400 border-surface-600',
     ON_LEAVE: 'bg-amber-500/20 text-amber-300 border-amber-500/30',

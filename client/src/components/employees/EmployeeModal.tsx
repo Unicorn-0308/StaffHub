@@ -12,7 +12,6 @@ import {
   BookOpen,
   Flag,
   FlagOff,
-  Edit,
   Trash2,
   User,
   Clock,
@@ -20,7 +19,7 @@ import {
 } from 'lucide-react';
 import { Employee } from '../../types';
 import { useAuth } from '../../context/AuthContext';
-import { DELETE_EMPLOYEE, FLAG_EMPLOYEE, UNFLAG_EMPLOYEE, UPDATE_EMPLOYEE } from '../../graphql/mutations';
+import { DELETE_EMPLOYEE, FLAG_EMPLOYEE, UNFLAG_EMPLOYEE } from '../../graphql/mutations';
 import FlagReasonModal from '../ui/FlagReasonModal';
 import toast from 'react-hot-toast';
 
@@ -32,29 +31,15 @@ interface EmployeeModalProps {
 
 const EmployeeModal: React.FC<EmployeeModalProps> = ({ employee, onClose, onRefetch }) => {
   const { isAdmin } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
   const [showFlagModal, setShowFlagModal] = useState(false);
   
   // Local state for flag status (to update UI immediately)
   const [isFlagged, setIsFlagged] = useState(employee.isFlagged);
   const [flagReason, setFlagReason] = useState(employee.flagReason);
-  
-  const [editData, setEditData] = useState({
-    firstName: employee.firstName,
-    lastName: employee.lastName,
-    email: employee.email,
-    phone: employee.phone || '',
-    department: employee.department,
-    position: employee.position,
-    age: employee.age,
-    status: employee.status,
-    attendance: employee.attendance,
-  });
 
   const [deleteEmployee] = useMutation(DELETE_EMPLOYEE);
   const [flagEmployee] = useMutation(FLAG_EMPLOYEE);
   const [unflagEmployee] = useMutation(UNFLAG_EMPLOYEE);
-  const [updateEmployee, { loading: updating }] = useMutation(UPDATE_EMPLOYEE);
 
   const handleDelete = async () => {
     if (!confirm(`Are you sure you want to delete ${employee.fullName}?`)) return;
@@ -93,22 +78,6 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ employee, onClose, onRefe
       onRefetch();
     } catch (error) {
       toast.error('Failed to unflag employee');
-    }
-  };
-
-  const handleUpdate = async () => {
-    try {
-      await updateEmployee({
-        variables: {
-          id: employee.id,
-          input: editData,
-        },
-      });
-      toast.success('Employee updated successfully');
-      setIsEditing(false);
-      onRefetch();
-    } catch (error) {
-      toast.error('Failed to update employee');
     }
   };
 
@@ -383,13 +352,6 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ employee, onClose, onRefe
             >
               <Trash2 size={18} />
               Delete
-            </button>
-            <button
-              onClick={() => setIsEditing(true)}
-              className="btn-primary"
-            >
-              <Edit size={18} />
-              Edit Employee
             </button>
           </div>
         )}

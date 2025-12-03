@@ -95,7 +95,7 @@ const DashboardPage: React.FC = () => {
         animate="visible"
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
       >
-        {statCards.map((stat, index) => {
+        {statCards.map((stat) => {
           const Icon = stat.icon;
           const colorClasses = {
             primary: 'from-primary-500/20 to-primary-600/10 border-primary-500/20',
