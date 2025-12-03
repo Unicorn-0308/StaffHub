@@ -1,8 +1,7 @@
-import { PrismaClient, User, Role } from '@prisma/client';
+import { PrismaClient, Employee } from '@prisma/client';
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-import DataLoader from 'dataloader';
-import { Employee } from '@prisma/client';
+import type DataLoader from 'dataloader';
 
 // Initialize Prisma Client with query logging in development
 const prisma = new PrismaClient({
@@ -13,14 +12,14 @@ const prisma = new PrismaClient({
 interface JWTPayload {
   userId: string;
   email: string;
-  role: Role;
+  role: string;
 }
 
 // Auth user type
 export interface AuthUser {
   id: string;
   email: string;
-  role: Role;
+  role: string;
 }
 
 // Context interface

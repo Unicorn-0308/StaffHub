@@ -37,7 +37,8 @@ const signupRequestResolvers = {
   },
 };
 
-export const resolvers = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const resolvers: Record<string, any> = {
   DateTime: dateTimeScalar,
   Query: queryResolvers,
   Mutation: mutationResolvers,
