@@ -15,7 +15,6 @@ import { createLoaders } from './graphql/loaders.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 async function startServer() {
   // Create Express app and HTTP server
@@ -73,25 +72,7 @@ async function startServer() {
   app.use(
     '/graphql',
     cors<cors.CorsRequest>({
-      origin: (origin, callback) => {
-        // Allow requests with no origin (mobile apps, curl, etc.)
-        if (!origin) return callback(null, true);
-        
-        // Allow localhost, local network IPs, and Apollo Studio
-        const allowedPatterns = [
-          /^http:\/\/localhost:\d+$/,
-          /^http:\/\/127\.0\.0\.1:\d+$/,
-          /^http:\/\/192\.168\.\d+\.\d+:\d+$/,
-          /^http:\/\/10\.\d+\.\d+\.\d+:\d+$/,
-          /^https:\/\/studio\.apollographql\.com$/,
-        ];
-        
-        if (allowedPatterns.some(pattern => pattern.test(origin))) {
-          return callback(null, true);
-        }
-        
-        callback(new Error('Not allowed by CORS'));
-      },
+      origin: true, // Allow all origins
       credentials: true,
     }),
     express.json({ limit: '50mb' }),
