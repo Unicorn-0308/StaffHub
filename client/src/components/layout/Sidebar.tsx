@@ -92,8 +92,39 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const isActive = (href: string) => {
+    const [hrefPath, hrefSearch] = href.split('?');
+    
+    // For root path, exact match only
     if (href === '/') return location.pathname === '/';
-    return location.pathname.startsWith(href.split('?')[0]);
+    
+    // Check if pathname matches
+    const pathMatches = location.pathname === hrefPath || location.pathname.startsWith(hrefPath + '/');
+    
+    // If href has query params, check them too
+    if (hrefSearch) {
+      const hrefParams = new URLSearchParams(hrefSearch);
+      const currentParams = new URLSearchParams(location.search);
+      
+      // Check if all href params exist in current URL
+      for (const [key, value] of hrefParams.entries()) {
+        if (currentParams.get(key) !== value) {
+          return false;
+        }
+      }
+      return pathMatches;
+    }
+    
+    // For paths without query params, match only if current URL also has no relevant params
+    // This prevents "/employees" from being active when "/employees?filter=flagged" is shown
+    if (pathMatches && location.search) {
+      const currentParams = new URLSearchParams(location.search);
+      // If there are filter/view/action params, the base path shouldn't be active
+      if (currentParams.has('filter') || currentParams.has('view') || currentParams.has('action')) {
+        return false;
+      }
+    }
+    
+    return pathMatches;
   };
 
   const filteredNavItems = navItems.filter(
@@ -203,9 +234,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                             <NavLink
                               to={child.href}
                               onClick={onClose}
-                              className={({ isActive: active }) =>
+                              className={() =>
                                 `flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
-                                  active
+                                  isActive(child.href)
                                     ? 'bg-primary-500/10 text-primary-400'
                                     : 'text-surface-500 hover:text-surface-200 hover:bg-surface-800/30'
                                 }`

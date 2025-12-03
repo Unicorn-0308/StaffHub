@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu,
@@ -162,13 +162,20 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           {/* Horizontal menu - desktop */}
           <nav className="hidden md:flex items-center gap-1">
             {horizontalMenuItems.map((item) => (
-              <Link
+              <NavLink
                 key={item.id}
                 to={item.href}
-                className="px-4 py-2 text-sm font-medium text-surface-400 hover:text-surface-100 hover:bg-surface-800/50 rounded-lg transition-all duration-200"
+                end={item.href === '/'}
+                className={({ isActive }) =>
+                  `px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? 'text-primary-400 bg-primary-500/10'
+                      : 'text-surface-400 hover:text-surface-100 hover:bg-surface-800/50'
+                  }`
+                }
               >
                 {item.label}
-              </Link>
+              </NavLink>
             ))}
           </nav>
         </div>
