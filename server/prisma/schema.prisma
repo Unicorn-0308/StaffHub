@@ -1,0 +1,107 @@
+// Prisma Schema for StaffHub Employee Management System
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("EMPLOYEE") // ADMIN, EMPLOYEE
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation to Employee profile (if user is an employee)
+  employee   Employee? @relation(fields: [employeeId], references: [id])
+  employeeId String?   @unique
+
+  @@map("users")
+}
+
+// Employee model - main data entity
+model Employee {
+  id           String   @id @default(cuid())
+  employeeId   String   @unique // Custom employee ID like EMP001
+  firstName    String
+  lastName     String
+  email        String   @unique
+  phone        String?
+  avatar       String?  // URL to avatar image
+  age          Int
+  dateOfBirth  DateTime?
+  gender       String   @default("OTHER") // MALE, FEMALE, OTHER
+  
+  // Work related
+  department   String
+  position     String
+  class        String?  // For educational context
+  subjects     String?  // JSON array stored as string (SQLite limitation)
+  salary       Float?
+  joinDate     DateTime @default(now())
+  
+  // Status
+  status       String   @default("ACTIVE") // ACTIVE, INACTIVE, ON_LEAVE, TERMINATED
+  isFlagged    Boolean  @default(false)
+  flagReason   String?
+  
+  // Attendance (percentage)
+  attendance   Float    @default(100)
+  
+  
+  // Address
+  address      String?
+  city         String?
+  state        String?
+  country      String?
+  zipCode      String?
+  
+  // Metadata
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  user         User?
+
+  @@map("employees")
+}
+
+// Signup Request model - for pending account approvals
+model SignupRequest {
+  id          String   @id @default(cuid())
+  
+  // Account credentials
+  email       String   @unique
+  password    String   // Hashed password
+  
+  // Personal info
+  firstName   String
+  lastName    String
+  phone       String?
+  age         Int
+  gender      String   @default("OTHER") // MALE, FEMALE, OTHER
+  
+  // Address
+  address     String?
+  city        String?
+  state       String?
+  country     String?
+  zipCode     String?
+  
+  // Status
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  rejectionReason String?
+  
+  // Metadata
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("signup_requests")
+}
